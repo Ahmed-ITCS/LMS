@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{ member.name }}</title>
+  </head>
+  <body>
+    <h1>{{ member.name }}</h1>
+
+    <p>Member ID: {{ member.member_id }}</p>
+
+    <a href="{% url 'member_list' %}"> Back to Members </a>
+  </body>
+</html>

@@ -1,0 +1,56 @@
+{% extends 'library_app/base.html' %}
+
+{% block title %}Search — Athenaeum{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Search the Collection</h1>
+    <p>Find books by title, author, or exact ISBN number.</p>
+</div>
+
+<div class="search-hero">
+    <form method="get">
+        <div class="form-group" style="margin-bottom:1rem;">
+            <label for="id_query">What are you looking for?</label>
+            {{ form.query }}
+        </div>
+        <button type="submit" class="btn btn-primary">Search Catalog</button>
+    </form>
+</div>
+
+{% if form.query.value %}
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h2>Search Results</h2>
+            <p class="card-subtitle">{{ results|length }} result{{ results|length|pluralize }} for "{{ form.query.value }}"</p>
+        </div>
+    </div>
+
+    {% if results %}
+    <div class="book-grid">
+        {% for book in results %}
+        <article class="book-card">
+            <span class="isbn">{{ book.isbn }}</span>
+            <h3>{{ book.title }}</h3>
+            <p class="author">by {{ book.author }}</p>
+            <div class="book-meta">
+                {% if book.copies > 0 %}
+                    <span class="badge badge-success">{{ book.copies }} available</span>
+                {% else %}
+                    <span class="badge badge-danger">Out of stock</span>
+                {% endif %}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>No matches found</h3>
+        <p>Try a different search term or browse the <a href="{% url 'catalog' %}">full catalog</a>.</p>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

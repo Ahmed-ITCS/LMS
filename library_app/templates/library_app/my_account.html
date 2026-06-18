@@ -1,0 +1,85 @@
+{% extends 'library_app/base.html' %}
+
+{% block title %}My Account — Athenaeum{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>My Account</h1>
+    <p>Your membership profile and complete borrowing history.</p>
+</div>
+
+<div class="profile-grid">
+    <div class="card profile-card">
+        <div class="profile-avatar-lg">{{ member.user.first_name|first|default:member.user.username|first|upper }}</div>
+        <h2 style="font-family:var(--font-display);font-size:1.5rem;margin:0 0 0.25rem;">
+            {{ member.user.get_full_name|default:member.user.username }}
+        </h2>
+        <p style="color:var(--text-muted);margin:0 0 1.5rem;font-size:0.9rem;">Library Member</p>
+
+        <div class="profile-detail">
+            <span class="label">Member ID</span>
+            <span class="value text-gold">{{ member.member_id }}</span>
+        </div>
+        <div class="profile-detail">
+            <span class="label">Username</span>
+            <span class="value">{{ member.user.username }}</span>
+        </div>
+        <div class="profile-detail">
+            <span class="label">Email</span>
+            <span class="value">{{ member.user.email|default:"—" }}</span>
+        </div>
+        <div class="profile-detail">
+            <span class="label">Active Loans</span>
+            <span class="value">{{ active_loan_count }}</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h2>Borrowing History</h2>
+                <p class="card-subtitle">All loans associated with your account</p>
+            </div>
+        </div>
+
+        {% if loans %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>ISBN</th>
+                        <th>Issued</th>
+                        <th>Returned</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loan in loans %}
+                    <tr>
+                        <td><strong>{{ loan.book.title }}</strong><br><small style="color:var(--text-dim);">{{ loan.book.author }}</small></td>
+                        <td><span class="text-gold">{{ loan.book.isbn }}</span></td>
+                        <td>{{ loan.issue_date|date:"M d, Y" }}</td>
+                        <td>{{ loan.return_date|date:"M d, Y"|default:"—" }}</td>
+                        <td>
+                            {% if loan.is_active %}
+                                <span class="badge badge-success">Active</span>
+                            {% else %}
+                                <span class="badge badge-muted">Returned</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📖</div>
+            <h3>No borrowing history</h3>
+            <p>You haven't checked out any books yet. <a href="{% url 'catalog' %}">Browse the catalog</a> to get started.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

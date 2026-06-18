@@ -1,0 +1,27 @@
+{% extends 'library_app/base.html' %}
+
+{% block title %}Return Book — Athenaeum{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Process Return</h1>
+    <p>Mark an active loan as returned and restore inventory.</p>
+</div>
+
+<div class="card form-card" style="max-width:520px;">
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        <div class="actions">
+            <button type="submit" class="btn btn-primary">Process Return</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'library_app/base.html' %}
+
+{% block title %}Catalog — Athenaeum{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Book Catalog</h1>
+        <p>Browse our curated collection of titles available for borrowing.</p>
+    </div>
+    {% if user.is_staff %}
+    <div class="header-actions">
+        <a href="{% url 'add_book' %}" class="btn btn-primary">+ Add New Book</a>
+    </div>
+    {% endif %}
+</div>
+
+{% if books %}
+<div class="book-grid">
+    {% for book in books %}
+    <article class="book-card">
+        <span class="isbn">{{ book.isbn }}</span>
+        <h3>{{ book.title }}</h3>
+        <p class="author">by {{ book.author }}</p>
+        <div class="book-meta">
+            {% if book.copies > 0 %}
+                <span class="badge badge-success">{{ book.copies }} available</span>
+            {% else %}
+                <span class="badge badge-danger">Out of stock</span>
+            {% endif %}
+            {% if book.active_loans > 0 %}
+                <span class="badge badge-gold">{{ book.active_loans }} on loan</span>
+            {% endif %}
+        </div>
+        {% if user.is_staff %}
+        <form method="post" action="{% url 'remove_book' book.isbn %}" style="margin-top:0.5rem;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Remove this book from the catalog?');">Remove</button>
+        </form>
+        {% endif %}
+    </article>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <div class="empty-icon">📚</div>
+        <h3>Catalog is empty</h3>
+        <p>No books have been added yet.{% if user.is_staff %} Start by adding your first title.{% endif %}</p>
+        {% if user.is_staff %}
+        <a href="{% url 'add_book' %}" class="btn btn-primary mt-1">Add First Book</a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

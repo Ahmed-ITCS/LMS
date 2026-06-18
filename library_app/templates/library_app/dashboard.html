@@ -1,0 +1,145 @@
+{% extends 'library_app/base.html' %}
+
+{% block title %}Dashboard — Athenaeum{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Welcome to Athenaeum</h1>
+    <p>Your central hub for catalog discovery, borrowing, and library operations.</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon books">📖</div>
+        <strong>{{ stats.total_books }}</strong>
+        <span>Unique Titles</span>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon copies">📚</div>
+        <strong>{{ stats.total_copies }}</strong>
+        <span>Available Copies</span>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon members">👥</div>
+        <strong>{{ stats.total_members }}</strong>
+        <span>Registered Members</span>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon loans">🔖</div>
+        <strong>{{ stats.active_loans }}</strong>
+        <span>Active Loans</span>
+    </div>
+</div>
+
+<div class="quick-links">
+    <a href="{% url 'catalog' %}" class="quick-link">
+        <div class="ql-icon" style="background:rgba(212,175,55,0.15);">📖</div>
+        <div class="ql-text">
+            <strong>Browse Catalog</strong>
+            <span>Explore our full collection</span>
+        </div>
+    </a>
+    <a href="{% url 'search' %}" class="quick-link">
+        <div class="ql-icon" style="background:var(--accent-soft);">🔍</div>
+        <div class="ql-text">
+            <strong>Search Books</strong>
+            <span>Find by title, author, or ISBN</span>
+        </div>
+    </a>
+    {% if user.is_authenticated %}
+    <a href="{% url 'my_account' %}" class="quick-link">
+        <div class="ql-icon" style="background:rgba(139,92,246,0.15);">👤</div>
+        <div class="ql-text">
+            <strong>My Account</strong>
+            <span>View your borrowing history</span>
+        </div>
+    </a>
+    {% else %}
+    <a href="{% url 'register' %}" class="quick-link">
+        <div class="ql-icon" style="background:var(--success-bg);">✨</div>
+        <div class="ql-text">
+            <strong>Join the Library</strong>
+            <span>Create your member account</span>
+        </div>
+    </a>
+    {% endif %}
+</div>
+
+{% if my_loans %}
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h2>My Active Loans</h2>
+            <p class="card-subtitle">Books currently checked out under your account</p>
+        </div>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>ISBN</th>
+                    <th>Issued</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in my_loans %}
+                <tr>
+                    <td><strong>{{ loan.book.title }}</strong></td>
+                    <td><span class="text-gold">{{ loan.book.isbn }}</span></td>
+                    <td>{{ loan.issue_date|date:"M d, Y" }}</td>
+                    <td><span class="badge badge-success">Active</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h2>Recent Activity</h2>
+            <p class="card-subtitle">Latest borrowing transactions across the library</p>
+        </div>
+    </div>
+    {% if recent_transactions %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Member</th>
+                    <th>Issued</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for txn in recent_transactions %}
+                <tr>
+                    <td><strong>{{ txn.book.title }}</strong></td>
+                    <td>{{ txn.member }}</td>
+                    <td>{{ txn.issue_date|date:"M d, Y" }}</td>
+                    <td>
+                        {% if txn.is_active %}
+                            <span class="badge badge-success">Active</span>
+                        {% else %}
+                            <span class="badge badge-muted">Returned</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>No transactions yet</h3>
+        <p>Activity will appear here once books are issued.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

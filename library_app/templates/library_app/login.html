@@ -1,0 +1,46 @@
+{% extends 'library_app/base.html' %}
+
+{% block title %}Login — Athenaeum{% endblock %}
+
+{% block content %}
+<div class="auth-layout">
+    <div class="auth-hero">
+        <h1>Enter the Athenaeum</h1>
+        <p>Access your personal library account to track loans, search the catalog, and manage your reading journey.</p>
+        <ul class="auth-features">
+            <li>Browse thousands of curated titles</li>
+            <li>Track your active and past loans</li>
+            <li>Instant search across the collection</li>
+        </ul>
+    </div>
+
+    <div class="card form-card">
+        <h2 style="font-family:var(--font-display);font-size:1.75rem;margin:0 0 0.25rem;">Sign In</h2>
+        <p style="color:var(--text-muted);margin:0 0 1.5rem;font-size:0.9rem;">Welcome back, member.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary" style="width:100%;">Sign In</button>
+        </form>
+
+        <p style="margin-top:1.5rem;text-align:center;color:var(--text-muted);font-size:0.9rem;">
+            No account? <a href="{% url 'register' %}">Create one free</a>
+        </p>
+
+        <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+            <p style="font-size:0.8rem;color:var(--text-dim);margin:0 0 0.5rem;">Demo accounts</p>
+            <p style="font-size:0.8rem;color:var(--text-muted);margin:0;">
+                Member: <span class="text-gold">alice</span> / password123<br>
+                Librarian: <span class="text-gold">librarian</span> / librarian123
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

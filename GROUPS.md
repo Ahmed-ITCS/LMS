@@ -27,12 +27,27 @@ group-a-book → group-b-member → group-c-library → group-d-issue-return
 
 ## Workflow
 
-1. **Branch** — `git checkout -b group-x-name` from latest `main`
-2. **Develop** — only touch files assigned to your group
-3. **Test** — run your module tests locally
-4. **PR** — open a pull request using `.github/PULL_REQUEST_TEMPLATE.md`
+1. **Branch** — `git checkout main && git pull` then `git checkout -b group-a-book` (use your group's branch name)
+2. **Develop** — only touch files assigned to your group (see table above)
+3. **Push** — `git push -u origin group-a-book`
+4. **PR** — open a pull request from your group branch → `main` using `.github/PULL_REQUEST_TEMPLATE.md`
 5. **Review** — at least one other group reviews; Group H verifies tests
-6. **Merge** — merge to `main` only after approval
+6. **Merge** — merge to `main` only after approval (never push directly to `main`)
+
+### Branch map on GitHub
+
+| Branch | Group |
+|--------|-------|
+| `group-a-book` | A |
+| `group-b-member` | B |
+| `group-c-library` | C |
+| `group-d-issue-return` | D |
+| `group-e-search` | E |
+| `group-f-auth` | F |
+| `group-g-interface` | G |
+| `group-h-testing` | H |
+
+`main` receives merges from each group branch in order (A → H).
 
 ## Standalone vs Django
 

@@ -1,0 +1,39 @@
+{% extends 'library_app/base.html' %}
+
+{% block title %}Register — Athenaeum{% endblock %}
+
+{% block content %}
+<div class="auth-layout">
+    <div class="auth-hero">
+        <h1>Join the Library</h1>
+        <p>Become a member of Athenaeum and unlock access to our full catalog, borrowing history, and personalized dashboard.</p>
+        <ul class="auth-features">
+            <li>Free membership registration</li>
+            <li>Unique member ID for all transactions</li>
+            <li>Full borrowing history at your fingertips</li>
+        </ul>
+    </div>
+
+    <div class="card form-card">
+        <h2 style="font-family:var(--font-display);font-size:1.75rem;margin:0 0 0.25rem;">Create Account</h2>
+        <p style="color:var(--text-muted);margin:0 0 1.5rem;font-size:0.9rem;">Start your library journey today.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<small style="color:var(--text-dim);font-size:0.8rem;">{{ field.help_text }}</small>{% endif %}
+                {{ field.errors }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
+        </form>
+
+        <p style="margin-top:1.5rem;text-align:center;color:var(--text-muted);font-size:0.9rem;">
+            Already a member? <a href="{% url 'login' %}">Sign in</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

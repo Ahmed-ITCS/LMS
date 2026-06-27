@@ -1,0 +1,32 @@
+# Git
+.git
+.github
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.egg-info
+dist
+build
+venv
+.venv
+env
+
+# Django runtime / local data
+*.log
+db.sqlite3
+db.sqlite3-journal
+media
+staticfiles
+
+# Environment & IDE
+.env
+.env.*
+.idea
+.vscode
+*.swp
+.DS_Store
+
+# Docs & scripts not needed in the image
+scripts
